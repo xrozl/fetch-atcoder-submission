@@ -1,3 +1,9 @@
 .venv
 .vscode/*
 !.vscode/settings.json
+
+**/__pycache__
+**/*.pyc
+
+dist
+dist/*
