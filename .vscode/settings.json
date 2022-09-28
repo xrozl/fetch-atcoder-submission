@@ -1,6 +1,8 @@
 {
     "python.linting.enabled": true,
     "python.linting.pylintEnabled": false,
+    "python.linting.mypyEnabled": true,
+    "python.linting.mypyPath": "./.venv/Scripts/mypy.exe",
     "python.linting.flake8Enabled": true,
     "python.linting.flake8Path": "./.venv/Scripts/pflake8.exe",
     "python.formatting.provider": "black",
