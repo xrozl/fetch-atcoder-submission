@@ -1,28 +1,29 @@
 import asyncio
 import json
 import os
+from typing import Dict, List
 
 from tqdm import tqdm
 
-from atcoder import fetch_all_submissions, fetch_submission_code
+from atcoder import Submission, fetch_all_submissions, fetch_submission_code
 
 
-def get_extension(language):
+def get_extension(language: str) -> str:
     for v in extensions:
         if language.startswith(v):
             return f".{extensions[v]}"
     return ""
 
 
-def read_json(path):
+def read_json(path: str) -> Dict[str, str]:
     with open(path, mode="r", encoding="UTF-8") as f:
         return json.load(f)
 
 
-def write_code(submission, code):
-    language = submission["language"]
-    contest_id = submission["contest_id"]
-    problem_id = submission["problem_id"]
+def write_code(submission: Submission, code: str) -> None:
+    language = submission.language
+    contest_id = submission.contest_id
+    problem_id = submission.problem_id
     extension = get_extension(language)
 
     dir_path = f"./dist/{language}/{contest_id}/"
@@ -35,14 +36,14 @@ def write_code(submission, code):
     return
 
 
-def filter_ac_and_latest(submissions):
-    _submissions = sorted(submissions, key=lambda x: x["epoch_second"], reverse=True)
+def filter_ac_and_latest(submissions: List[Submission]) -> List[Submission]:
+    _submissions = sorted(submissions, key=lambda x: x.epoch_second, reverse=True)
     history = set()
-    result = []
+    result: List[Submission] = []
 
     for submission in _submissions:
-        if submission["result"] == "AC":
-            pair = (submission["language"], submission["problem_id"])
+        if submission.result == "AC":
+            pair = (submission.language, submission.problem_id)
             if pair not in history:
                 history.add(pair)
                 result.append(submission)
@@ -50,14 +51,14 @@ def filter_ac_and_latest(submissions):
     return result
 
 
-async def main():
+async def main() -> None:
     all_submission = fetch_all_submissions(USER_ID)
     loop = asyncio.get_event_loop()
     asyncio.set_event_loop(loop)
 
     for submission in tqdm(filter_ac_and_latest(all_submission)):
         await asyncio.sleep(1.5)
-        code = fetch_submission_code(submission["contest_id"], submission["id"])
+        code = fetch_submission_code(submission.contest_id, submission.id)
         loop.run_in_executor(None, write_code, submission, code)
 
     print("All latest AC codes have been fetched.")
