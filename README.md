@@ -35,3 +35,8 @@ poetry shell
 poetry install
 pre-commit install
 ```
+
+### docker
+```
+docker compose up -d --build
+```

@@ -1,6 +1,6 @@
-.venv
-.vscode/*
-!.vscode/settings.json
+.venv/
+.vscode/
+.idea/
 
 **/__pycache__
 **/*.pyc

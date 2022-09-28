@@ -1,0 +1,15 @@
+version: '3'
+services:
+  python3:
+    restart: no
+    build: .
+    container_name: 'fetch-atcoder-submission'
+    working_dir: '/root/'
+    tty: true
+    volumes:
+      - ./link:/root/opt
+    deploy:
+      resources:
+        limits:
+          cpus: '2.00'
+          memory: 1024M
